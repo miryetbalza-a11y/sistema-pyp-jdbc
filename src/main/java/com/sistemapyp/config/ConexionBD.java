@@ -1,7 +1,7 @@
 package com.sistemapyp.config;
 
 // ============================================================================
-// PASO 3 DEL FLUJO JDBC (SENA CF20): Importar el paquete java.sql.*
+// PASO 3 DEL FLUJO JDBC: Importar el paquete java.sql.*
 // Estas interfaces y clases permiten la comunicación directa con la base de datos.
 // ============================================================================
 import java.io.InputStream;
@@ -21,12 +21,14 @@ import java.util.Properties;
  * - Paso 4: Carga e inicialización del Driver MySQL (Class.forName)
  * - Paso 5: Creación del objeto Connection mediante DriverManager
  * 
- * @author SENA ADSO - Sistema PyP
+ * @author SENA - Sistema PyP - Linyermar Altuzarra & Angie Garzon
  * @version 1.0
  */
 public class ConexionBD {
 
     // Constantes por defecto para la conexión a MySQL
+    // se establecen las constantes aqui para poder probar la conexion
+    // de manera autonoma ejecutando la clase
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String URL_DEFAULT = "jdbc:mysql://localhost:3306/sistema_pyp?useSSL=false&serverTimezone=America/Bogota&allowPublicKeyRetrieval=true";
     private static final String USER_DEFAULT = "root";
@@ -37,7 +39,6 @@ public class ConexionBD {
     private static String password;
     private static String driver;
 
-    // Bloque estático: Se ejecuta una sola vez al cargar la clase en memoria
     static {
         cargarConfiguracion();
         registrarDriver();
@@ -72,7 +73,7 @@ public class ConexionBD {
 
     /**
      * ========================================================================
-     * PASO 4 DEL FLUJO JDBC (SENA CF20): Inicializar el Driver con Class.forName
+     * PASO 4 DEL FLUJO JDBC: Inicializar el Driver con Class.forName
      * ========================================================================
      * Carga dinámicamente en el ClassLoader de Java la clase del Driver MySQL
      * registrada en el conector (mysql-connector-j).
@@ -90,7 +91,7 @@ public class ConexionBD {
 
     /**
      * ========================================================================
-     * PASO 5 DEL FLUJO JDBC (SENA CF20): Crear el objeto de tipo Connection
+     * PASO 5 DEL FLUJO JDBC: Crear el objeto de tipo Connection
      * ========================================================================
      * Utiliza DriverManager.getConnection pasando la URL, usuario y contraseña
      * para abrir un canal de comunicación TCP hacia el servidor MySQL.

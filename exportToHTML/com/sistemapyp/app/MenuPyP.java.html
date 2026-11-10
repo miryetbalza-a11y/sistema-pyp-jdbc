@@ -1,0 +1,395 @@
+<html>
+<head>
+<title>MenuPyP.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #7a7e85;}
+.s6 { color: #2aacb8;}
+.s7 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MenuPyP.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">sistemapyp</span><span class="s2">.</span><span class="s1">app</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">sistemapyp</span><span class="s2">.</span><span class="s1">config</span><span class="s2">.</span><span class="s1">ConexionBD</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">sistemapyp</span><span class="s2">.</span><span class="s1">dao</span><span class="s2">.</span><span class="s1">IUsuarioDAO</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">sistemapyp</span><span class="s2">.</span><span class="s1">dao</span><span class="s2">.</span><span class="s1">UsuarioDAOImpl</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">sistemapyp</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Usuario</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Scanner</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Clase Principal de la Aplicación: MenuPyP</span>
+ <span class="s3">* </span>
+ <span class="s3">* Presenta una interfaz de consola interactiva y pedagógica para demostrar</span>
+ <span class="s3">* el funcionamiento de las operaciones CRUD sobre la tabla 'usuario' del</span>
+ <span class="s3">* Sistema de Promoción y Prevención en Salud (PyP), aplicando el estándar JDBC</span>
+ <span class="s3">* del componente formativo SENA CF20.</span>
+ <span class="s3">* </span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">SENA ADSO - Sistema PyP</span>
+ <span class="s3">* </span><span class="s4">@version </span><span class="s3">1.0</span>
+ <span class="s3">*/</span>
+<span class="s0">public class </span><span class="s1">MenuPyP </span><span class="s2">{</span>
+
+    <span class="s0">private final </span><span class="s1">IUsuarioDAO usuarioDAO</span><span class="s2">;</span>
+    <span class="s0">private final </span><span class="s1">Scanner scanner</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">MenuPyP</span><span class="s2">() {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">usuarioDAO </span><span class="s2">= </span><span class="s0">new </span><span class="s1">UsuarioDAOImpl</span><span class="s2">();</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">scanner </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Scanner</span><span class="s2">(</span><span class="s1">System</span><span class="s2">.</span><span class="s1">in</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Punto de entrada principal de la aplicación.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) {</span>
+        <span class="s1">MenuPyP app </span><span class="s2">= </span><span class="s0">new </span><span class="s1">MenuPyP</span><span class="s2">();</span>
+
+        <span class="s5">// Si se pasa el argumento &quot;--auto&quot;, ejecuta la demostración automática sin esperar teclado</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">args</span><span class="s2">.</span><span class="s1">length </span><span class="s2">&gt; </span><span class="s6">0 </span><span class="s2">&amp;&amp; </span><span class="s7">&quot;--auto&quot;</span><span class="s2">.</span><span class="s1">equalsIgnoreCase</span><span class="s2">(</span><span class="s1">args</span><span class="s2">[</span><span class="s6">0</span><span class="s2">])) {</span>
+            <span class="s1">app</span><span class="s2">.</span><span class="s1">ejecutarDemostracionAutomatica</span><span class="s2">();</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">app</span><span class="s2">.</span><span class="s1">iniciarMenu</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Despliega el menú interactivo por consola.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">iniciarMenu</span><span class="s2">() {</span>
+        <span class="s0">int </span><span class="s1">opcion </span><span class="s2">= -</span><span class="s6">1</span><span class="s2">;</span>
+        <span class="s0">do </span><span class="s2">{</span>
+            <span class="s1">mostrarEncabezado</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 1. [CREATE]  Registrar nuevo usuario / paciente&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 2. [READ]    Listar todos los usuarios&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 3. [READ]    Buscar usuario por documento&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 4. [UPDATE]  Actualizar datos de un usuario&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 5. [DELETE]  Eliminar un usuario&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 6. [JDBC]    Verificar conexión con MySQL (8 pasos)&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 7. [DEMO]    Ejecutar demostración automática completa&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot; 0. Salir de la aplicación&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;---------------------------------------------------------------------------------&quot;</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Seleccione una opción: &quot;</span><span class="s2">);</span>
+
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s1">String linea </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+                <span class="s1">opcion </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">linea</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">());</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">) {</span>
+                <span class="s1">opcion </span><span class="s2">= -</span><span class="s6">1</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">switch </span><span class="s2">(</span><span class="s1">opcion</span><span class="s2">) {</span>
+                <span class="s0">case </span><span class="s6">1 </span><span class="s1">-&gt; registrarUsuario</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">2 </span><span class="s1">-&gt; listarUsuarios</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">3 </span><span class="s1">-&gt; buscarUsuario</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">4 </span><span class="s1">-&gt; actualizarUsuario</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">5 </span><span class="s1">-&gt; eliminarUsuario</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">6 </span><span class="s1">-&gt; ConexionBD</span><span class="s2">.</span><span class="s1">probarConexion</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">7 </span><span class="s1">-&gt; ejecutarDemostracionAutomatica</span><span class="s2">();</span>
+                <span class="s0">case </span><span class="s6">0 </span><span class="s1">-&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">¡Gracias por utilizar el Sistema PyP! Hasta pronto.&quot;</span><span class="s2">);</span>
+                <span class="s0">default </span><span class="s1">-&gt; System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[AVISO] Opción no válida. Por favor, intente nuevamente.&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">opcion </span><span class="s2">!= </span><span class="s6">0</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">Presione ENTER para continuar...&quot;</span><span class="s2">);</span>
+                <span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">();</span>
+            <span class="s2">}</span>
+
+        <span class="s2">} </span><span class="s0">while </span><span class="s2">(</span><span class="s1">opcion </span><span class="s2">!= </span><span class="s6">0</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">mostrarEncabezado</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">=================================================================================&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;            SISTEMA DE PROMOCIÓN Y PREVENCIÓN EN SALUD (PyP)&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;              EVIDENCIA: GA7-220501096-AA2-EV01 - SENA ADSO&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;=================================================================================&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Operación CREATE: Pide los datos por teclado y los envía al DAO.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private void </span><span class="s1">registrarUsuario</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">--- [CREATE] REGISTRAR NUEVO USUARIO / PACIENTE ---&quot;</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Documento de identidad (ID): &quot;</span><span class="s2">);</span>
+        <span class="s1">String id </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s5">// Validar que no exista previamente</span>
+        <span class="s1">Usuario existente </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">existente </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;[ERROR] Ya existe un usuario con el ID &quot; </span><span class="s2">+ </span><span class="s1">id </span><span class="s2">+ </span><span class="s7">&quot;: &quot; </span><span class="s2">+ </span><span class="s1">existente</span><span class="s2">.</span><span class="s1">getNombre</span><span class="s2">());</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nombre completo: &quot;</span><span class="s2">);</span>
+        <span class="s1">String nombre </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Sexo (Masculino/Femenino/Otro): &quot;</span><span class="s2">);</span>
+        <span class="s1">String sexo </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Edad (0 a 120): &quot;</span><span class="s2">);</span>
+        <span class="s1">Integer edad </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">String edadStr </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">edadStr</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+                <span class="s1">edad </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">edadStr</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;[AVISO] Formato de edad no válido, se registrará sin edad.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Teléfono de contacto: &quot;</span><span class="s2">);</span>
+        <span class="s1">String telefono </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;País: &quot;</span><span class="s2">);</span>
+        <span class="s1">String pais </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Tipo de usuario (1: PACIENTE / 2: PERSONAL_SALUD): &quot;</span><span class="s2">);</span>
+        <span class="s1">String tipoOpcion </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s1">String tipoUsuario </span><span class="s2">= </span><span class="s7">&quot;2&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">tipoOpcion</span><span class="s2">) ? </span><span class="s7">&quot;PERSONAL_SALUD&quot; </span><span class="s2">: </span><span class="s7">&quot;PACIENTE&quot;</span><span class="s2">;</span>
+
+        <span class="s1">Usuario nuevo </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Usuario</span><span class="s2">(</span><span class="s1">id</span><span class="s2">, </span><span class="s1">nombre</span><span class="s2">, </span><span class="s1">sexo</span><span class="s2">, </span><span class="s1">edad</span><span class="s2">, </span><span class="s1">telefono</span><span class="s2">, </span><span class="s1">pais</span><span class="s2">, </span><span class="s1">tipoUsuario</span><span class="s2">);</span>
+        <span class="s0">boolean </span><span class="s1">exito </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">registrar</span><span class="s2">(</span><span class="s1">nuevo</span><span class="s2">);</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">exito</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[ÉXITO] Usuario registrado correctamente en MySQL.&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[FALLO] No se pudo registrar el usuario en la base de datos.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Operación READ: Muestra todos los usuarios en formato de tabla.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private void </span><span class="s1">listarUsuarios</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">--- [READ] LISTADO GENERAL DE USUARIOS ---&quot;</span><span class="s2">);</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Usuario</span><span class="s2">&gt; </span><span class="s1">usuarios </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">listarTodos</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">usuarios</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;No hay usuarios registrados actualmente en la base de datos.&quot;</span><span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Usuario u </span><span class="s2">: </span><span class="s1">usuarios</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">u</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">imprimirPieTabla</span><span class="s2">(</span><span class="s1">usuarios</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Operación READ: Consulta un usuario por su documento.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private void </span><span class="s1">buscarUsuario</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">--- [READ] CONSULTAR USUARIO POR DOCUMENTO ---&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Ingrese el documento a buscar: &quot;</span><span class="s2">);</span>
+        <span class="s1">String id </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">Usuario usuario </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">usuario </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[RESULTADO] Usuario encontrado:&quot;</span><span class="s2">);</span>
+            <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">usuario</span><span class="s2">);</span>
+            <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[AVISO] No se encontró ningún usuario con el ID: &quot; </span><span class="s2">+ </span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Operación UPDATE: Modifica los datos de un usuario existente.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private void </span><span class="s1">actualizarUsuario</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">--- [UPDATE] ACTUALIZAR DATOS DE UN USUARIO ---&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Ingrese el documento del usuario a modificar: &quot;</span><span class="s2">);</span>
+        <span class="s1">String id </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">Usuario actual </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">actual </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[ERROR] No existe ningún usuario con el ID: &quot; </span><span class="s2">+ </span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">Datos actuales del usuario:&quot;</span><span class="s2">);</span>
+        <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">actual</span><span class="s2">);</span>
+        <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;(Deje el campo en blanco y presione ENTER si desea conservar el valor actual)&quot;</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nuevo nombre [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getNombre</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String nombre </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">nombre</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setNombre</span><span class="s2">(</span><span class="s1">nombre</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nuevo sexo [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getSexo</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String sexo </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">sexo</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setSexo</span><span class="s2">(</span><span class="s1">sexo</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nueva edad [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getEdad</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String edadStr </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">edadStr</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s1">actual</span><span class="s2">.</span><span class="s1">setEdad</span><span class="s2">(</span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">edadStr</span><span class="s2">));</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;[AVISO] Edad inválida, se conserva la anterior.&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nuevo teléfono [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getTelefono</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String telefono </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">telefono</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setTelefono</span><span class="s2">(</span><span class="s1">telefono</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nuevo país [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getPais</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String pais </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">pais</span><span class="s2">.  </span><span class="s1">isEmpty</span><span class="s2">()) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setPais</span><span class="s2">(</span><span class="s1">pais</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Nuevo tipo de usuario (1: PACIENTE / 2: PERSONAL_SALUD) [&quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getTipoUsuario</span><span class="s2">() + </span><span class="s7">&quot;]: &quot;</span><span class="s2">);</span>
+        <span class="s1">String tipoOpcion </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s7">&quot;1&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">tipoOpcion</span><span class="s2">)) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setTipoUsuario</span><span class="s2">(</span><span class="s7">&quot;PACIENTE&quot;</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s7">&quot;2&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">tipoOpcion</span><span class="s2">)) </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">setTipoUsuario</span><span class="s2">(</span><span class="s7">&quot;PERSONAL_SALUD&quot;</span><span class="s2">);</span>
+
+        <span class="s0">boolean </span><span class="s1">exito </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">actualizar</span><span class="s2">(</span><span class="s1">actual</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">exito</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[ÉXITO] Usuario actualizado correctamente en MySQL.&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[FALLO] No se pudo actualizar el registro.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Operación DELETE: Elimina un usuario por su documento.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private void </span><span class="s1">eliminarUsuario</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">--- [DELETE] ELIMINAR USUARIO DEL SISTEMA ---&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Ingrese el documento del usuario a eliminar: &quot;</span><span class="s2">);</span>
+        <span class="s1">String id </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s1">Usuario actual </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">actual </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[ERROR] No existe ningún usuario con el ID: &quot; </span><span class="s2">+ </span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">¿Está seguro de eliminar a &quot; </span><span class="s2">+ </span><span class="s1">actual</span><span class="s2">.</span><span class="s1">getNombre</span><span class="s2">() + </span><span class="s7">&quot; (ID: &quot; </span><span class="s2">+ </span><span class="s1">id </span><span class="s2">+ </span><span class="s7">&quot;)?&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">print</span><span class="s2">(</span><span class="s7">&quot;Escriba 'S' para confirmar: &quot;</span><span class="s2">);</span>
+        <span class="s1">String confirmacion </span><span class="s2">= </span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">();</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s7">&quot;S&quot;</span><span class="s2">.</span><span class="s1">equalsIgnoreCase</span><span class="s2">(</span><span class="s1">confirmacion</span><span class="s2">)) {</span>
+            <span class="s0">boolean </span><span class="s1">exito </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">eliminar</span><span class="s2">(</span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">exito</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[ÉXITO] Usuario eliminado correctamente de la base de datos.&quot;</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[FALLO] No se pudo eliminar el usuario.&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[CANCELADO] Operación cancelada por el usuario.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Demostración automática pedagógica: Ejecuta en secuencia las 4 operaciones</span>
+     <span class="s3">* CRUD para validar todo el flujo sin requerir interacción manual.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">ejecutarDemostracionAutomatica</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">=================================================================================&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;   DEMOSTRACIÓN PEDAGÓGICA AUTOMÁTICA DEL FLUJO CRUD - SISTEMA PyP&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;=================================================================================&quot;</span><span class="s2">);</span>
+
+        <span class="s1">String testId </span><span class="s2">= </span><span class="s7">&quot;CC10203040&quot;</span><span class="s2">;</span>
+
+        <span class="s5">// Limpiar registro de prueba si existía</span>
+        <span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">eliminar</span><span class="s2">(</span><span class="s1">testId</span><span class="s2">);</span>
+
+        <span class="s5">// 1. CREATE</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[PASO 1: CREATE] Insertando usuario de prueba: &quot; </span><span class="s2">+ </span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s1">Usuario nuevo </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Usuario</span><span class="s2">(</span>
+            <span class="s1">testId</span><span class="s2">,</span>
+            <span class="s7">&quot;María Paula Rodríguez&quot;</span><span class="s2">,</span>
+            <span class="s7">&quot;Femenino&quot;</span><span class="s2">,</span>
+            <span class="s6">28</span><span class="s2">,</span>
+            <span class="s7">&quot;+57 3105559876&quot;</span><span class="s2">,</span>
+            <span class="s7">&quot;Colombia&quot;</span><span class="s2">,</span>
+            <span class="s7">&quot;PACIENTE&quot;</span>
+        <span class="s2">);</span>
+        <span class="s0">boolean </span><span class="s1">insertado </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">registrar</span><span class="s2">(</span><span class="s1">nuevo</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Resultado de inserción: &quot; </span><span class="s2">+ (</span><span class="s1">insertado </span><span class="s2">? </span><span class="s7">&quot;EXITOSO&quot; </span><span class="s2">: </span><span class="s7">&quot;FALLÓ&quot;</span><span class="s2">));</span>
+
+        <span class="s5">// 2. READ (Individual)</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[PASO 2: READ (Individual)] Consultando usuario con ID &quot; </span><span class="s2">+ </span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s1">Usuario leido </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">leido </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">leido</span><span class="s2">);</span>
+            <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s5">// 3. UPDATE</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[PASO 3: UPDATE] Actualizando teléfono y edad de &quot; </span><span class="s2">+ </span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">leido </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">leido</span><span class="s2">.</span><span class="s1">setTelefono</span><span class="s2">(</span><span class="s7">&quot;+57 3001112233&quot;</span><span class="s2">);</span>
+            <span class="s1">leido</span><span class="s2">.</span><span class="s1">setEdad</span><span class="s2">(</span><span class="s6">29</span><span class="s2">);</span>
+            <span class="s0">boolean </span><span class="s1">actualizado </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">actualizar</span><span class="s2">(</span><span class="s1">leido</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Resultado de actualización: &quot; </span><span class="s2">+ (</span><span class="s1">actualizado </span><span class="s2">? </span><span class="s7">&quot;EXITOSO&quot; </span><span class="s2">: </span><span class="s7">&quot;FALLÓ&quot;</span><span class="s2">));</span>
+
+            <span class="s1">Usuario verificado </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">testId</span><span class="s2">);</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Verificación de datos actualizados:&quot;</span><span class="s2">);</span>
+            <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">verificado</span><span class="s2">);</span>
+            <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+        <span class="s2">}</span>
+
+        <span class="s5">// 4. READ (General)</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[PASO 4: READ (General)] Listado de todos los usuarios en la base:&quot;</span><span class="s2">);</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Usuario</span><span class="s2">&gt; </span><span class="s1">lista </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">listarTodos</span><span class="s2">();</span>
+        <span class="s1">imprimirCabeceraTabla</span><span class="s2">();</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s1">Usuario u </span><span class="s2">: </span><span class="s1">lista</span><span class="s2">) {</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">u</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">imprimirPieTabla</span><span class="s2">(</span><span class="s1">lista</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+
+        <span class="s5">// 5. DELETE</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">[PASO 5: DELETE] Eliminando usuario de prueba: &quot; </span><span class="s2">+ </span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s0">boolean </span><span class="s1">eliminado </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">eliminar</span><span class="s2">(</span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Resultado de eliminación: &quot; </span><span class="s2">+ (</span><span class="s1">eliminado </span><span class="s2">? </span><span class="s7">&quot;EXITOSO&quot; </span><span class="s2">: </span><span class="s7">&quot;FALLÓ&quot;</span><span class="s2">));</span>
+
+        <span class="s5">// Verificar que ya no existe</span>
+        <span class="s1">Usuario postDelete </span><span class="s2">= </span><span class="s1">usuarioDAO</span><span class="s2">.</span><span class="s1">buscarPorId</span><span class="s2">(</span><span class="s1">testId</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Verificación post-eliminación (debe ser null): &quot; </span><span class="s2">+ </span><span class="s1">postDelete</span><span class="s2">);</span>
+
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;</span><span class="s0">\n</span><span class="s7">=================================================================================&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;  ¡DEMOSTRACIÓN CRUD FINALIZADA CON ÉXITO CUMPLIENDO LOS 8 PASOS JDBC!&quot;</span><span class="s2">);</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;=================================================================================</span><span class="s0">\n</span><span class="s7">&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">imprimirCabeceraTabla</span><span class="s2">() {</span>
+        <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s1">String</span><span class="s2">.</span><span class="s1">format</span><span class="s2">(</span>
+            <span class="s7">&quot;| %-15s | %-25s | %-10s | %-4s | %-12s | %-12s | %-15s |&quot;</span><span class="s2">,</span>
+            <span class="s7">&quot;DOCUMENTO (ID)&quot;</span><span class="s2">, </span><span class="s7">&quot;NOMBRE COMPLETO&quot;</span><span class="s2">, </span><span class="s7">&quot;SEXO&quot;</span><span class="s2">, </span><span class="s7">&quot;EDAD&quot;</span><span class="s2">, </span><span class="s7">&quot;TELÉFONO&quot;</span><span class="s2">, </span><span class="s7">&quot;PAÍS&quot;</span><span class="s2">, </span><span class="s7">&quot;TIPO USUARIO&quot;</span>
+        <span class="s2">));</span>
+        <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">imprimirSeparadorTabla</span><span class="s2">() {</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;+-----------------+---------------------------+------------+------+--------------+--------------+-----------------+&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">imprimirPieTabla</span><span class="s2">(</span><span class="s0">int </span><span class="s1">total</span><span class="s2">) {</span>
+        <span class="s1">imprimirSeparadorTabla</span><span class="s2">();</span>
+        <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s7">&quot;Total de registros cargados: &quot; </span><span class="s2">+ </span><span class="s1">total</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

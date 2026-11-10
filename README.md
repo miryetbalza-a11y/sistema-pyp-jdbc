@@ -37,7 +37,7 @@ src/main/java/com/sistemapyp/
 
 ---
 
-## 3. Demostración Formal del Flujo JDBC de 8 Pasos (SENA CF20)
+## 3. Demostración Formal del Flujo JDBC de 8 Pasos
 
 | Paso | Requerimiento CF20 | Implementación en el Proyecto |
 | :---: | :--- | :--- |
@@ -108,7 +108,7 @@ java -cp target/classes:/Users/linyerbalza/.m2/repository/com/mysql/mysql-connec
 
 El proyecto cuenta con control de versiones Git estructurado mediante mensajes semánticos de commit:
 - `feat: Inicialización del repositorio y estructura base del proyecto`
-- `feat: Módulo de conexión JDBC con flujo de 8 pasos (SENA CF20)`
+- `feat: Módulo de conexión JDBC con flujo de 8 pasos`
 - `feat: Modelo de entidad Usuario y contrato de persistencia IUsuarioDAO`
 - `feat: Implementación de persistencia UsuarioDAOImpl con operaciones CRUD`
 - `feat: Menú interactivo por consola y suite de pruebas unitarias`

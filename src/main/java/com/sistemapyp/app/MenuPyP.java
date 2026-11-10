@@ -16,7 +16,7 @@ import java.util.Scanner;
  * Sistema de Promoción y Prevención en Salud (PyP), aplicando el estándar JDBC
  * del componente formativo SENA CF20.
  * 
- * @author SENA ADSO - Sistema PyP
+ * @author SENA - Sistema PyP - Linyermar Altuzarra & Angie Garzon
  * @version 1.0
  */
 public class MenuPyP {
@@ -231,7 +231,7 @@ public class MenuPyP {
 
         System.out.print("Nuevo país [" + actual.getPais() + "]: ");
         String pais = scanner.nextLine().trim();
-        if (!pais.isEmpty()) actual.setPais(pais);
+        if (!pais.  isEmpty()) actual.setPais(pais);
 
         System.out.print("Nuevo tipo de usuario (1: PACIENTE / 2: PERSONAL_SALUD) [" + actual.getTipoUsuario() + "]: ");
         String tipoOpcion = scanner.nextLine().trim();

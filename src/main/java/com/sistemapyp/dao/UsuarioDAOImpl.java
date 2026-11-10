@@ -1,7 +1,7 @@
 package com.sistemapyp.dao;
 
 // ============================================================================
-// PASO 3 DEL FLUJO JDBC (SENA CF20): Importación del paquete java.sql.*
+// PASO 3 DEL FLUJO JDBC: Importación del paquete java.sql.*
 // Clases fundamentales: Connection, PreparedStatement, ResultSet, SQLException
 // ============================================================================
 import java.sql.Connection;
